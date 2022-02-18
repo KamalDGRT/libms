@@ -64,3 +64,15 @@ class UserLogin(Base):
     )
 
     user_profile = relationship("UserProfile")
+
+
+class BookCategory(Base):
+    __tablename__ = "book_category"
+
+    book_category_id = Column(Integer, primary_key=True, index=True)
+    category_name = Column(String, index=True, nullable=False)
+    created_at = Column(TIMESTAMP(
+        timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
