@@ -43,7 +43,24 @@ class UserProfile(Base):
         default=5,
         nullable=False
     )
-    # This is gonna create another property for us for our employee table
-    # so that when we retrieve our employee details, it will fetch the
-    # properties of the employee_type table
+
     user_role = relationship("Role")
+
+
+class UserLogin(Base):
+    __tablename__ = "user_login"
+    user_login_id = Column(Integer, primary_key=True, index=True)
+    user_profile_id = Column(
+        Integer,
+        ForeignKey("user_profile.user_profile_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    email_address = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(
+        timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    user_profile = relationship("UserProfile")
