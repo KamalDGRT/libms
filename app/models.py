@@ -3,7 +3,7 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey
 from .database import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
@@ -55,7 +55,7 @@ class UserLogin(Base):
         ForeignKey("user_profile.user_profile_id", ondelete="CASCADE"),
         nullable=False
     )
-    email_address = Column(String, nullable=False)
+    email_address = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(
         timezone=True),
@@ -76,3 +76,31 @@ class BookCategory(Base):
         nullable=False,
         server_default=text('now()')
     )
+
+
+class Book(Base):
+    __tablename__ = "book"
+
+    book_id = Column(Integer, primary_key=True, index=True)
+    isbn = Column(String, nullable=False, unique=True)
+    book_name = Column(String, nullable=False)
+    book_author = Column(String, nullable=False)
+    edition = Column(Integer, nullable=False)
+
+    book_category_id = Column(
+        Integer,
+        ForeignKey("book_category.book_category_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    book_price = Column(Float, nullable=False)
+    book_count = Column(Integer, nullable=False)
+    book_description = Column(String, nullable=False)
+
+    created_at = Column(TIMESTAMP(
+        timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    book_category = relationship("BookCategory")
