@@ -3,9 +3,6 @@
 
 from fastapi import FastAPI
 
-
-from app.database import SQLALCHEMY_DATABASE_URL
-
 app = FastAPI(
     title="Library Management System",
     description="API for the LibMS Swift Mini Project!",
