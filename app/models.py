@@ -104,3 +104,31 @@ class Book(Base):
     )
 
     book_category = relationship("BookCategory")
+
+
+class BookTransaction(Base):
+    __tablename__ = "book_transaction"
+
+    book_transaction_id = Column(Integer, primary_key=True, index=True)
+    borrowed_by = Column(
+        Integer,
+        ForeignKey("user_profile.user_profile_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    issued_date = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+    due_date = Column(
+        TIMESTAMP(timezone=True),
+        server_default=text("NOW() + INTERVAL '5 day'")
+    )
+    book_fine = Column(Float, nullable=True)
+    remarks = Column(String, nullable=True)
+    created_at = Column(TIMESTAMP(
+        timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+    borrower = relationship("UserProfile")
