@@ -25,21 +25,28 @@ def get_current_user(
 @ router.get('/all', response_model=List[schemas.UserProfileTable])
 # @router.get('/')
 def get_users(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user)
 ):
+
+    if current_user.role_id != 1 or current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Not Authorized to perform requested action!"
+        )
+
     results = db.query(models.UserProfile).all()
     return results
 
 
 @ router.post(
     '/create',
-    # status_code=status.HTTP_201_CREATED,
-    # response_model=schemas.UserOut
+    status_code=status.HTTP_201_CREATED,
+    response_model=schemas.UserOut
 )
 def create_user(
     user: schemas.UserCreate,
-    db: Session = Depends(get_db),
-    response_model=schemas.UserOut
+    db: Session = Depends(get_db)
 ):
     """
     Inserting a new user into the database
@@ -62,7 +69,8 @@ def create_user(
         user_name=input_data['user_name'],
         phone_number=input_data['phone_number'],
         residential_address=input_data['residential_address'],
-        books_allowed=input_data['books_allowed']
+        books_allowed=input_data['books_allowed'],
+        role_id=input_data['role_id']
     )
     db.add(user_profile)
     db.commit()
@@ -74,8 +82,7 @@ def create_user(
     user_login = models.UserLogin(
         user_profile_id=user_profile_id,
         email_address=input_data['email_address'],
-        password=input_data['password'],
-        role_id=input_data['role_id']
+        password=input_data['password']
     )
     db.add(user_login)
     db.commit()
@@ -97,8 +104,16 @@ def create_user(
 )
 def get_user(
     id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user)
 ):
+
+    if current_user.role_id != 1 or current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Not Authorized to perform requested action!"
+        )
+
     user = db.query(
         models.UserProfile
     ).filter(

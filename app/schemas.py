@@ -55,9 +55,6 @@ class UserDetail(BaseModel):
     role_id: int = 2
     email_address: EmailStr
 
-    class Config:
-        orm_mode = True
-
 
 class UserCreate(UserDetail):
     password: str
@@ -68,9 +65,6 @@ class UserCreate(UserDetail):
 
 class UserProfile(UserDetail):
     user_profile_id: int
-
-    class Config:
-        orm_mode = True
 
 
 class UserProfileCreate(BaseModel):
