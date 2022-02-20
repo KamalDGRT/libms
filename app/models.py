@@ -44,7 +44,7 @@ class UserProfile(Base):
         nullable=False
     )
 
-    user_role = relationship("Role")
+    user_role = relationship("Role", foreign_keys=[role_id])
 
 
 class UserLogin(Base):
@@ -63,7 +63,7 @@ class UserLogin(Base):
         server_default=text('now()')
     )
 
-    user_profile = relationship("UserProfile")
+    user_profile = relationship("UserProfile", foreign_keys=[user_profile_id])
 
 
 class BookCategory(Base):
@@ -103,7 +103,8 @@ class Book(Base):
         server_default=text('now()')
     )
 
-    book_category = relationship("BookCategory")
+    book_category = relationship(
+        "BookCategory", foreign_keys=[book_category_id])
 
 
 class BookTransaction(Base):
@@ -131,7 +132,7 @@ class BookTransaction(Base):
         nullable=False,
         server_default=text('now()')
     )
-    borrower = relationship("UserProfile")
+    borrower = relationship("UserProfile", foreign_keys=[borrowed_by])
 
 
 class BookBorrow(Base):
@@ -153,5 +154,6 @@ class BookBorrow(Base):
         nullable=False,
         server_default=text('now()')
     )
-    book_borrowed = relationship("Book")
-    book_borrow_transaction = relationship("BookTransaction")
+    book_borrowed = relationship("Book", foreign_keys=[book_id])
+    book_borrow_transaction = relationship(
+        "BookTransaction", foreign_keys=[book_transaction_id])
