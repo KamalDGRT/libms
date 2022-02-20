@@ -2,6 +2,7 @@
 # How to run the code: uvicorn app.main:app --reload
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Library Management System",
@@ -11,6 +12,16 @@ app = FastAPI(
         "name": "Kamal",
         "url": "https://github.com/KamalDGRT"
     }
+)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
