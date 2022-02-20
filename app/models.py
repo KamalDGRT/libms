@@ -38,6 +38,12 @@ class UserProfile(Base):
         default=5,
         nullable=False
     )
+    role_id = Column(
+        Integer,
+        ForeignKey("role.role_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    user_role = relationship("Role", foreign_keys=[role_id])
 
 
 class UserLogin(Base):
@@ -55,14 +61,7 @@ class UserLogin(Base):
         nullable=False,
         server_default=text('now()')
     )
-    role_id = Column(
-        Integer,
-        ForeignKey("role.role_id", ondelete="CASCADE"),
-        nullable=False
-    )
-
     user_profile = relationship("UserProfile", foreign_keys=[user_profile_id])
-    user_role = relationship("Role", foreign_keys=[role_id])
 
 
 class BookCategory(Base):
