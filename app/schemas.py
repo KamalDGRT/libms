@@ -26,24 +26,69 @@ class Role(RoleCreate):
 
 
 class UserOut(BaseModel):
-    id: int
-    email: EmailStr
+    user_profile_id: int
+    user_name: str
+    email_address: EmailStr
     created_at: datetime
 
     class Config:
         orm_mode = True
 
 
-class UserCreate(BaseModel):
+class UserProfileTable(BaseModel):
+    user_profile_id: int
     user_name: str
-    role_id: int
-    email: EmailStr
+    phone_number: str
+    residential_address: str
+    books_allowed: int = 5
+    role_id: int = 2
+
+    class Config:
+        orm_mode = True
+
+
+class UserDetail(BaseModel):
+    user_name: str
+    phone_number: str
+    residential_address: str
+    books_allowed: int = 5
+    role_id: int = 2
+    email_address: EmailStr
+
+    class Config:
+        orm_mode = True
+
+
+class UserCreate(UserDetail):
     password: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserProfile(UserDetail):
+    user_profile_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class UserProfileCreate(BaseModel):
+    user_name: str
+    phone_number: str
+    residential_address: str
+    books_allowed: int = 5
+
+    class Config:
+        orm_mode = True
 
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+    class Config:
+        orm_mode = True
 
 
 class Token(BaseModel):
@@ -52,4 +97,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    id: Optional[str] = None
+    user_profile_id: Optional[str] = None

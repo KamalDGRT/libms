@@ -4,6 +4,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .routers import (
+    role,
+    user,
+    auth
+)
+
 app = FastAPI(
     title="Library Management System",
     description="API for the LibMS Swift Mini Project!",
@@ -23,6 +29,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(role.router)
+app.include_router(user.router)
+app.include_router(auth.router)
 
 
 @app.get("/")
