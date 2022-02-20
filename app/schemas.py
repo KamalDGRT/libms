@@ -92,3 +92,22 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     user_profile_id: Optional[str] = None
+
+
+# ------------------------------------------------------------------------------
+
+class BookCategoryCreate(BaseModel):
+    category_name: str
+
+    class Config:
+        orm_mode = True
+
+
+class BookCategory(BookCategoryCreate):
+    book_category_id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+# -------------------------------------------------------------------------------

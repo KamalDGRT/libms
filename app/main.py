@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from .routers import (
     role,
     user,
-    auth
+    auth,
+    book_category
 )
 
 app = FastAPI(
@@ -33,6 +34,7 @@ app.add_middleware(
 app.include_router(role.router)
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(book_category.router)
 
 
 @app.get("/")
