@@ -132,3 +132,26 @@ class BookTransaction(Base):
         server_default=text('now()')
     )
     borrower = relationship("UserProfile")
+
+
+class BookBorrow(Base):
+    __tablename__ = "book_borrow"
+
+    book_borrow_id = Column(Integer, primary_key=True, index=True)
+    book_id = Column(
+        Integer,
+        ForeignKey("book.book_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    book_transaction_id = Column(
+        Integer,
+        ForeignKey("book_transaction.book_transaction_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    created_at = Column(TIMESTAMP(
+        timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+    book_borrowed = relationship("Book")
+    book_borrow_transaction = relationship("BookTransaction")
