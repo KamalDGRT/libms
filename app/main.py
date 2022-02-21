@@ -8,7 +8,8 @@ from .routers import (
     role,
     user,
     auth,
-    book_category
+    book_category,
+    book
 )
 
 app = FastAPI(
@@ -35,6 +36,7 @@ app.include_router(role.router)
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(book_category.router)
+app.include_router(book.router)
 
 
 @app.get("/")

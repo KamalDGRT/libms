@@ -11,6 +11,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from pydantic.types import conint
+from sqlalchemy import Float
 
 
 class RoleCreate(BaseModel):
@@ -106,6 +107,57 @@ class BookCategoryCreate(BaseModel):
 class BookCategory(BookCategoryCreate):
     book_category_id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+# -------------------------------------------------------------------------------
+
+
+class BookCreate(BaseModel):
+    isbn: str
+    book_name: str
+    book_author: str
+    edition: int
+    book_category_id: int
+    book_price: float
+    book_count: int
+    book_description: str
+
+    class Config:
+        orm_mode = True
+
+
+class Initiative(BookCreate):
+    book_id: int
+    book_category: BookCategoryCreate
+
+    class Config:
+        orm_mode = True
+
+
+class BookSimple(BaseModel):
+    book_id: int
+    book_name: str
+    book_author: str
+    book_category: BookCategoryCreate
+
+    class Config:
+        orm_mode = True
+
+
+class BookShort(BaseModel):
+    book_id: int
+    book_name: str
+    book_author: str
+
+    class Config:
+        orm_mode = True
+
+
+class BookComplete(BookCreate):
+    created_at: datetime
+    book_category: BookCategory
 
     class Config:
         orm_mode = True
