@@ -242,3 +242,46 @@ class RatingComplete(RatingUpdate):
 
     class Config:
         orm_mode = True
+
+
+# -------------------------------------------------------------------------------
+
+class ReviewCreate(BaseModel):
+    book_id: int
+    description: str
+
+    class Config:
+        orm_mode = True
+
+
+class Review(ReviewCreate):
+    review_id: int
+    book: BookSimple
+
+    class Config:
+        orm_mode = True
+
+
+class ReviewSimple(BaseModel):
+    review_id: int
+    description: str
+    book: BookShort
+    reviewer: UserSimple
+
+    class Config:
+        orm_mode = True
+
+
+class ReviewUpdate(ReviewSimple):
+    given_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class ReviewComplete(ReviewUpdate):
+    reviewer: UserProfileTable
+
+    class Config:
+        orm_mode = True

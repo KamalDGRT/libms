@@ -190,3 +190,38 @@ class Rating(Base):
 
     rater = relationship("UserProfile", foreign_keys=[given_by])
     book = relationship("Book", foreign_keys=[book_id])
+
+
+class Review(Base):
+    __tablename__ = "review"
+
+    review_id = Column(Integer, primary_key=True, index=True)
+
+    book_id = Column(
+        Integer,
+        ForeignKey("book.book_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    description = Column(String, nullable=False)
+
+    given_by = Column(
+        Integer,
+        ForeignKey("user_profile.user_profile_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    given_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    updated_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    reviewer = relationship("UserProfile", foreign_keys=[given_by])
+    book = relationship("Book", foreign_keys=[book_id])
