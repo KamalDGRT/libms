@@ -26,6 +26,14 @@ class Role(RoleCreate):
         orm_mode = True
 
 
+class UserSimple(BaseModel):
+    user_profile_id: int
+    user_name: str
+
+    class Config:
+        orm_mode = True
+
+
 class UserOut(BaseModel):
     user_profile_id: int
     user_name: str
@@ -66,6 +74,9 @@ class UserCreate(UserDetail):
 
 class UserProfile(UserDetail):
     user_profile_id: int
+
+    class Config:
+        orm_mode = True
 
 
 class UserProfileCreate(BaseModel):
@@ -162,7 +173,7 @@ class BookComplete(BookCreate):
     class Config:
         orm_mode = True
 
-# -------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 
 class BookBorrowCreate(BaseModel):
@@ -188,3 +199,46 @@ class BookTransaction(BaseModel):
     due_date: datetime
     borrower: UserProfileTable
     books: List[BookSimple]
+
+
+# ------------------------------------------------------------------------------
+
+class RatingCreate(BaseModel):
+    book_id: int
+    point: int
+
+    class Config:
+        orm_mode = True
+
+
+class Rating(RatingCreate):
+    rating_id: int
+    book: BookSimple
+
+    class Config:
+        orm_mode = True
+
+
+class RatingSimple(BaseModel):
+    rating_id: int
+    point: int
+    book: BookShort
+    rater: UserSimple
+
+    class Config:
+        orm_mode = True
+
+
+class RatingUpdate(RatingSimple):
+    given_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class RatingComplete(RatingUpdate):
+    rater: UserProfileTable
+
+    class Config:
+        orm_mode = True

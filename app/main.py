@@ -9,7 +9,8 @@ from .routers import (
     user,
     auth,
     book_category,
-    book
+    book,
+    rating
 )
 
 app = FastAPI(
@@ -37,6 +38,7 @@ app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(book_category.router)
 app.include_router(book.router)
+app.include_router(rating.router)
 
 
 @app.get("/")

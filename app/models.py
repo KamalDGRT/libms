@@ -155,3 +155,38 @@ class BookBorrow(Base):
     book_borrowed = relationship("Book", foreign_keys=[book_id])
     book_borrow_transaction = relationship(
         "BookTransaction", foreign_keys=[book_transaction_id])
+
+
+class Rating(Base):
+    __tablename__ = "rating"
+
+    rating_id = Column(Integer, primary_key=True, index=True)
+
+    book_id = Column(
+        Integer,
+        ForeignKey("book.book_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    point = Column(Integer, nullable=False)
+
+    given_by = Column(
+        Integer,
+        ForeignKey("user_profile.user_profile_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    given_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    updated_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    rater = relationship("UserProfile", foreign_keys=[given_by])
+    book = relationship("Book", foreign_keys=[book_id])
