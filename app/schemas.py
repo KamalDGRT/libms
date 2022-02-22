@@ -8,7 +8,7 @@
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 from pydantic.types import conint
 from sqlalchemy import Float
@@ -128,7 +128,7 @@ class BookCreate(BaseModel):
         orm_mode = True
 
 
-class Initiative(BookCreate):
+class Book(BookCreate):
     book_id: int
     book_category: BookCategoryCreate
 
@@ -163,3 +163,28 @@ class BookComplete(BookCreate):
         orm_mode = True
 
 # -------------------------------------------------------------------------------
+
+
+class BookBorrowCreate(BaseModel):
+    book_id: int
+
+
+class BookBorrowSimple(BaseModel):
+    book: BookSimple
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class BookTransactionCreate(BaseModel):
+    borrowed_by: int
+    books: List[BookBorrowCreate]
+
+
+class BookTransaction(BaseModel):
+    book_transaction_id: int
+    issued_date: datetime
+    due_date: datetime
+    borrower: UserProfileTable
+    books: List[BookSimple]
