@@ -225,3 +225,22 @@ class Review(Base):
 
     reviewer = relationship("UserProfile", foreign_keys=[given_by])
     book = relationship("Book", foreign_keys=[book_id])
+
+
+class StatusCode(Base):
+    __tablename__ = "status_code"
+
+    status_id = Column(Integer, primary_key=True, index=True)
+    description = Column(String, nullable=False)
+
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    updated_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
