@@ -11,13 +11,14 @@ from .routers import (
     book_category,
     book,
     rating,
-    review
+    review,
+    book_transaction
 )
 
 app = FastAPI(
     title="Library Management System",
     description="API for the LibMS Swift Mini Project!",
-    version="0.1.0",
+    version="0.34.0",
     contact={
         "name": "Kamal",
         "url": "https://github.com/KamalDGRT"
@@ -41,6 +42,7 @@ app.include_router(book_category.router)
 app.include_router(book.router)
 app.include_router(rating.router)
 app.include_router(review.router)
+app.include_router(book_transaction.router)
 
 
 @app.get("/")

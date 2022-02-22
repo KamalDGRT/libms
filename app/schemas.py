@@ -7,6 +7,7 @@
     with the backend.
 """
 
+from ast import Dict
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr
@@ -179,6 +180,9 @@ class BookComplete(BookCreate):
 class BookBorrowCreate(BaseModel):
     book_id: int
 
+    class Config:
+        orm_mode = True
+
 
 class BookBorrowSimple(BaseModel):
     book: BookSimple
@@ -189,19 +193,32 @@ class BookBorrowSimple(BaseModel):
 
 
 class BookTransactionCreate(BaseModel):
-    borrowed_by: int
     books: List[BookBorrowCreate]
+
+    class Config:
+        orm_mode = True
+
+
+class BookTransactionSimple(BaseModel):
+    book_transaction_id: int
+    books: List
+
+    class Config:
+        orm_mode = True
 
 
 class BookTransaction(BaseModel):
     book_transaction_id: int
     issued_date: datetime
     due_date: datetime
-    borrower: UserProfileTable
-    books: List[BookSimple]
+    borrower: UserSimple
+
+    class Config:
+        orm_mode = True
 
 
 # ------------------------------------------------------------------------------
+
 
 class RatingCreate(BaseModel):
     book_id: int
