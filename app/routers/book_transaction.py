@@ -46,7 +46,21 @@ def initiate_book_transaction(
             detail=f"Not Authorized to perform requested action!"
         )
 
-    status = db.query(models.StatusCode).filter(
+    prev_transaction = db.query(
+        models.BookTransaction
+    ).filter(
+        models.BookTransaction.borrowed_by == current_user.user_profile_id
+    ).order_by(
+        models.BookTransaction.issued_date.desc()
+    ).first()
+
+    if prev_transaction is not None and prev_transaction.status_id == 1:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You have not returned books that you have borrowed. Return them to borrow new books."
+        )
+
+    trn_status = db.query(models.StatusCode).filter(
         models.StatusCode.status_id == 1
     ).first()
 
@@ -72,7 +86,7 @@ def initiate_book_transaction(
         db.refresh(book_borrowed)
         new_books.append(book_borrowed.__dict__)
 
-    return {"book_transaction_id": trn_id, "books": new_books, "status": status}
+    return {"book_transaction_id": trn_id, "books": new_books, "status": trn_status}
 
 
 @ router.get(
