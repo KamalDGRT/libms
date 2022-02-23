@@ -12,7 +12,8 @@ from .routers import (
     book,
     rating,
     review,
-    book_transaction
+    book_transaction,
+    status_code
 )
 
 app = FastAPI(
@@ -43,6 +44,7 @@ app.include_router(book.router)
 app.include_router(rating.router)
 app.include_router(review.router)
 app.include_router(book_transaction.router)
+app.include_router(status_code.router)
 
 
 @app.get("/")
