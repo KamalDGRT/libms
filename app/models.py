@@ -154,6 +154,7 @@ class BookTransaction(Base):
     status_id = Column(
         Integer,
         ForeignKey("status_code.status_id", ondelete="CASCADE"),
+        default=1,
         nullable=False
     )
 

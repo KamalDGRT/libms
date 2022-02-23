@@ -177,6 +177,30 @@ class BookComplete(BookCreate):
 # ------------------------------------------------------------------------------
 
 
+class StatusCodeCreate(BaseModel):
+    description: str
+
+    class Config:
+        orm_mode = True
+
+
+class StatusCode(StatusCodeCreate):
+    status_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class StatusCodeUpdate(StatusCode):
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+# -------------------------------------------------------------------------------
+
+
 class BookBorrowCreate(BaseModel):
     book_id: int
 
@@ -194,6 +218,14 @@ class BookBorrowSimple(BaseModel):
 
 class BookTransactionCreate(BaseModel):
     books: List[BookBorrowCreate]
+    status_id: int = 1
+
+    class Config:
+        orm_mode = True
+
+
+class BookTransactionUpdate(BaseModel):
+    status_id: int = 2
 
     class Config:
         orm_mode = True
@@ -202,6 +234,7 @@ class BookTransactionCreate(BaseModel):
 class BookTransactionSimple(BaseModel):
     book_transaction_id: int
     books: List
+    status: StatusCodeCreate
 
     class Config:
         orm_mode = True
@@ -212,6 +245,7 @@ class BookTransaction(BaseModel):
     issued_date: datetime
     due_date: datetime
     borrower: UserSimple
+    status: StatusCode
 
     class Config:
         orm_mode = True
@@ -299,30 +333,6 @@ class ReviewUpdate(ReviewSimple):
 
 class ReviewComplete(ReviewUpdate):
     reviewer: UserProfileTable
-
-    class Config:
-        orm_mode = True
-
-# -------------------------------------------------------------------------------
-
-
-class StatusCodeCreate(BaseModel):
-    description: str
-
-    class Config:
-        orm_mode = True
-
-
-class StatusCode(StatusCodeCreate):
-    status_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class StatusCodeUpdate(StatusCode):
-    created_at: datetime
-    updated_at: datetime
 
     class Config:
         orm_mode = True

@@ -46,6 +46,10 @@ def initiate_book_transaction(
             detail=f"Not Authorized to perform requested action!"
         )
 
+    status = db.query(models.StatusCode).filter(
+        models.StatusCode.status_id == 1
+    ).first()
+
     books = book.dict()["books"]
 
     new_book_transaction = models.BookTransaction(
@@ -68,19 +72,21 @@ def initiate_book_transaction(
         db.refresh(book_borrowed)
         new_books.append(book_borrowed.__dict__)
 
-    return {"book_transaction_id": trn_id, "books": new_books}
+    return {"book_transaction_id": trn_id, "books": new_books, "status": status}
 
 
-@router.get(
+@ router.get(
     '/info/{id}',
     response_model=schemas.BookTransaction
+
+
 )
 def get_book_transaction_info(
     id: int,
     db: Session = Depends(get_db),
     current_user: int = Depends(oauth2.get_current_user)
 ):
-    """ 
+    """
     {id} is a path parameter
     """
     # We are
@@ -106,7 +112,7 @@ def get_book_transaction_info(
     if not book:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Book with id: {id} not found!"
+            detail=f"Book Transaction with id: {id} not found!"
         )
 
     return book
@@ -138,7 +144,7 @@ def delete_book(
     if book is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Book with id: {id} does not exist!"
+            detail=f"Book Transaction with id: {id} does not exist!"
         )
 
     book_transaction_query.delete(synchronize_session=False)
@@ -154,7 +160,7 @@ def delete_book(
 )
 def update_book(
     id: int,
-    updated_book_transaction: schemas.BookTransactionCreate,
+    updated_book_transaction: schemas.BookTransactionUpdate,
     db: Session = Depends(get_db),
     current_user: int = Depends(oauth2.get_current_user)
 ):
