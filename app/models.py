@@ -105,6 +105,25 @@ class Book(Base):
         "BookCategory", foreign_keys=[book_category_id])
 
 
+class StatusCode(Base):
+    __tablename__ = "status_code"
+
+    status_id = Column(Integer, primary_key=True, index=True)
+    description = Column(String, nullable=False)
+
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+    updated_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text('now()')
+    )
+
+
 class BookTransaction(Base):
     __tablename__ = "book_transaction"
 
@@ -123,6 +142,7 @@ class BookTransaction(Base):
         TIMESTAMP(timezone=True),
         server_default=text("NOW() + INTERVAL '5 day'")
     )
+
     book_fine = Column(Float, nullable=True)
     remarks = Column(String, nullable=True)
     created_at = Column(TIMESTAMP(
@@ -152,6 +172,13 @@ class BookBorrow(Base):
         nullable=False,
         server_default=text('now()')
     )
+
+    status_id = Column(
+        Integer,
+        ForeignKey("status_code.status_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
     book_borrowed = relationship("Book", foreign_keys=[book_id])
     book_borrow_transaction = relationship(
         "BookTransaction", foreign_keys=[book_transaction_id])
@@ -225,22 +252,3 @@ class Review(Base):
 
     reviewer = relationship("UserProfile", foreign_keys=[given_by])
     book = relationship("Book", foreign_keys=[book_id])
-
-
-class StatusCode(Base):
-    __tablename__ = "status_code"
-
-    status_id = Column(Integer, primary_key=True, index=True)
-    description = Column(String, nullable=False)
-
-    created_at = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=text('now()')
-    )
-
-    updated_at = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=text('now()')
-    )
