@@ -150,7 +150,15 @@ class BookTransaction(Base):
         nullable=False,
         server_default=text('now()')
     )
+
+    status_id = Column(
+        Integer,
+        ForeignKey("status_code.status_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
     borrower = relationship("UserProfile", foreign_keys=[borrowed_by])
+    status = relationship("StatusCode", foreign_keys=[status_id])
 
 
 class BookBorrow(Base):
@@ -171,12 +179,6 @@ class BookBorrow(Base):
         timezone=True),
         nullable=False,
         server_default=text('now()')
-    )
-
-    status_id = Column(
-        Integer,
-        ForeignKey("status_code.status_id", ondelete="CASCADE"),
-        nullable=False
     )
 
     book_borrowed = relationship("Book", foreign_keys=[book_id])
